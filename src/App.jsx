@@ -5,7 +5,7 @@ function App() {
 
   return (
     <>
-    <h1>final Clean up</h1>
+    <h1 className='textgi-blue-500'>final Clean up</h1>
     </>
   )
 }

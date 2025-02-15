@@ -1,26 +1,30 @@
-import { Route, Routes } from "react-router-dom";
+import { Route, Router, Routes } from "react-router-dom";
 import "./App.css";
 import Navbar from "./components/Navbar";
-import Footer from "./components/Footer"
-import Homepage from "./pages/Homepage"
+import Footer from "./components/Footer";
+import Homepage from "./pages/Homepage";
 import Hero from "./pages/Hero";
+import Dashboard from "./components/Dashboard";
+import About from "./components/About";
+import Faq from "./components/Faq"
+import Features from "./components/Features";
 
 function App() {
   return (
     <>
-    <div className="container relative mx-auto p-6">
-    <Navbar />
-    <Hero />
-      <Routes>
-        <Route path="/" element ={<Homepage/>}/>
-      </Routes>
-      <Footer/>
+      <div className="container relative mx-auto p-6 h-screen">
+        <Navbar />
 
-      
+          <Routes>
+            <Route path="/" element={<Homepage />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/faq" element={<Faq />} />
+            <Route path="/features" element={<Features />} />
+          </Routes>
 
-    </div>
-      
-      
+          <Footer />
+      </div>
     </>
   );
 }

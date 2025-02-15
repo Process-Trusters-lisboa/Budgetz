@@ -5,9 +5,9 @@ function Hero() {
   return (
     <>
       <section>
-        <div className="flex flex-col-reverse mx-auto p-6 md:flex-row mb-20 mt-20">
+        <div className="flex flex-col-reverse mx-auto p-6 md:flex-row">
           <div className="flex flex-col space-y-10">
-            <h1 className="text-5xl text-center font-semibold sm: mt-10">
+            <h1 className="text-5xl text-center font-semibold">
               Your Smart Budget Manager
             </h1>
             <p className="max-w-md mx-auto text-lg text-center text-gray-500">
@@ -19,7 +19,11 @@ function Hero() {
             </p>
           </div>
           <div className="relative mx-auto md:ml-35">
-            <img className="relative z-10 w-100 h-auto mt-8 rounded-l-4xl" src={lisbonImage} alt="lisbon" />
+            <img
+              className="relative z-10 w-100 h-auto rounded-l-4xl"
+              src={lisbonImage}
+              alt="lisbon"
+            />
           </div>
         </div>
       </section>

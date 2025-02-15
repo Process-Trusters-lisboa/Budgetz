@@ -7,12 +7,16 @@ import Homepage from "./pages/Homepage"
 function App() {
   return (
     <>
-      <Navbar />
+    <div className="container relative mx-auto p-6">
+    <Navbar />
       <Routes>
         <Route path="/" element ={<Homepage/>}/>
       </Routes>
       <Footer/>
 
+      
+
+    </div>
       
       
     </>

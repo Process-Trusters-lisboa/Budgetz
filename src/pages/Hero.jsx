@@ -1,9 +1,8 @@
 import React from "react";
-import lisbonImage from "../assets/Lisbon.png";
 
 function Hero() {
   return (
-    <div className="min-h-screen bg-blue-500"> 
+    <div className="min-h-[90vh] w-[90vw] bg-blue-500 mx-auto">
       <section>
         <div className="flex flex-col-reverse mx-auto p-6 md:flex-row">
           <div className="flex flex-col space-y-10">
@@ -18,8 +17,7 @@ function Hero() {
               with real-time insights from our smart budgeting tool.
             </p>
           </div>
-          <div className="relative mx-auto md:ml-35">
-          </div>
+          <div className="relative mx-auto md:ml-35"></div>
         </div>
       </section>
     </div>

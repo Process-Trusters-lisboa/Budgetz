@@ -11,7 +11,7 @@ function Navbar() {
         {/* navbar logo */}
         <Link to="/">
           <div className="z-10 flex space-x-2 font-bold tracking-widest">
-            <img className="h-8" src={lisbonImage} alt="lisbon" />
+            
             <h1>Budgetz</h1>
           </div>
         </Link>

@@ -8,6 +8,7 @@ function Dashboard() {
     { name: 'Rent', value: 1000 },
     { name: 'Utility Bills', value: 200 },
     { name: 'Remaining Balance', value: 1000 },
+    { name: 'Miscellaneous', value: 300 },
   ]);
 
   const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884D8'];

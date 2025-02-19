@@ -1,9 +1,43 @@
-import React from "react";
-import lisbonImage from "../assets/Lisbon.png";
-import { Link } from "react-router-dom";
-import Dashboard from "./Dashboard";
+import React, { useState } from 'react';
+import { auth, googleProvider } from '../config/firebase'; 
+import { signInWithPopup, signOut } from 'firebase/auth';
+import { Link, useNavigate } from 'react-router-dom';  
+
 
 function Navbar() {
+
+   //firebase google authentication
+    const [user, setUser] = useState(null);
+    const navigate = useNavigate()
+  
+
+    //googleSignIn and Navigate to Homepage.
+    
+    const signInWithGoogle = async () => {
+      try {
+        const result = await signInWithPopup(auth, googleProvider);  
+        const currentUser = result.user;  
+        setUser(currentUser); 
+        console.log('Signed in as', currentUser.displayName);
+  
+        navigate('/dashboard');
+        
+        
+      } catch (e) {
+        console.log('Failed to sign in with Google', e);
+      }       
+    };
+  
+    const Logout = async () => {
+      try {
+        await signOut(auth); 
+      }
+      catch (e) {
+          console.log('Failed to sign in with Google', e);
+        }       
+  };
+
+
   return (
     <div>
       {/* navbar container */}
@@ -38,6 +72,9 @@ function Navbar() {
               My Dashboard
             </button>
           </Link>
+          <div onClick={signInWithGoogle} className="text-blue-950">
+            Google
+          </div>
         </div>
       </div>
     </div>

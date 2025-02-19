@@ -193,7 +193,7 @@ function Dashboard() {
               </button>
             </form>
 
-            <div className="w-full h-[350px] sm:h-[400px] md:h-[500px] lg:h-[600px]">
+            <div className="w-full h-[350px] sm:h-[400px] md:h-[500px] lg:h-[600px] flex">
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
                   <Pie
@@ -218,6 +218,10 @@ function Dashboard() {
             </div>
           </div>
         </div>
+        
+              <div>
+              <p>Testing!</p>
+              </div>
       </div>
     </>
   );

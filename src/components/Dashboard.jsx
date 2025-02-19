@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   PieChart,
   Pie,
@@ -9,9 +9,10 @@ import {
 } from "recharts";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import axios from "axios";
 
 function Dashboard() {
-  const initialCategories = [
+  const categories = [
     "Travel",
     "Food",
     "Rent",
@@ -21,7 +22,7 @@ function Dashboard() {
   ];
 
   const [expensesData, setExpensesData] = useState(
-    initialCategories.map((category) => ({ name: category, value: 0 }))
+    categories.map((category) => ({ name: category, value: 0 }))
   );
 
   const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#8884D8"];
@@ -32,6 +33,149 @@ function Dashboard() {
   const [selectedDateTime, setSelectedDateTime] = useState(new Date());
   const [editingIndex, setEditingIndex] = useState(null);
   const [editValue, setEditValue] = useState("");
+  const [loading, setLoading] = useState(true);
+
+  //axios fetch data
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const dataPromises = categories.map(async (category) => {
+          const response = await axios.get(
+            `https://firestore.googleapis.com/v1/projects/budgetz-7b9d9/databases/(default)/documents/newusers/user1/${category}`
+          );
+
+          if (response.data && response.data.documents) {
+            // Store all expense entries, including docId
+            const expenseItems = response.data.documents.map((document) => {
+              const amount = document.fields.amount
+                ? parseFloat(document.fields.amount.integerValue)
+                : 0;
+
+              return {
+                category: category.charAt(0).toUpperCase() + category.slice(1),
+                amount: amount,
+                color: COLORS[categories.indexOf(category) % COLORS.length], // Assign a color based on the category
+                dateTime: new Date().toLocaleString(),
+                docid: document.name.split("/").pop(), // Extract docId from the document's name
+              };
+            });
+
+            // Sum the expenses for each category
+            const totalAmount = expenseItems.reduce(
+              (total, item) => total + item.amount,
+              0
+            );
+
+            return {
+              name: category.charAt(0).toUpperCase() + category.slice(1),
+              value: totalAmount,
+              expenseItems, // Store individual expense items
+            };
+          } else {
+            console.warn(`No data found for category: ${category}`);
+            return {
+              name: category.charAt(0).toUpperCase() + category.slice(1),
+              value: 0,
+              expenseItems: [],
+            };
+          }
+        });
+
+        const fetchedData = await Promise.all(dataPromises);
+
+        console.log(`Fetched data: `, fetchedData);
+        setExpensesData(
+          fetchedData.map((item) => ({ name: item.name, value: item.value }))
+        ); // Note: Use just the totals for the chart
+        setExpensesList(fetchedData.flatMap((item) => item.expenseItems));
+        setLoading(false);
+      } catch (error) {
+        console.error("We can’t fetch data right now", error);
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  // add amount to firestore using axios
+  const handleAddAmount = async () => {
+    const amount = parseFloat(inputValue);
+    if (selectedCategory && !isNaN(amount) && amount >= 0) {
+      try {
+        // Add the new amount to Firestore
+        await axios.post(
+          `https://firestore.googleapis.com/v1/projects/budgetz-7b9d9/databases/(default)/documents/newusers/user1/${selectedCategory}`,
+          {
+            fields: {
+              amount: { integerValue: amount },
+            },
+          }
+        );
+
+        await fetchUpdatedData();
+
+        setInputValue("");
+      } catch (error) {
+        console.error("Error adding amount:", error);
+      }
+    } else {
+      alert("Please enter a valid amount (must be 0 or greater).");
+    }
+  };
+
+  // fetching data after update
+  const fetchUpdatedData = async () => {
+    try {
+      const dataPromises = categories.map(async (category) => {
+        const response = await axios.get(
+          `https://firestore.googleapis.com/v1/projects/budgetz-7b9d9/databases/(default)/documents/newusers/user1/${category}`
+        );
+
+        if (response.data && response.data.documents) {
+          const expenseItems = response.data.documents.map((document) => {
+            const amount = document.fields.amount
+              ? parseFloat(document.fields.amount.integerValue)
+              : 0;
+            return {
+              category: category.charAt(0).toUpperCase() + category.slice(1),
+              amount: amount,
+              color: COLORS[categories.indexOf(category) % COLORS.length],
+              dateTime: new Date().toLocaleString(),
+              docId: document.name.split("/").pop(), // Extracting the document ID from Firestore path
+            };
+          });
+
+          const totalAmount = expenseItems.reduce(
+            (total, item) => total + item.amount,
+            0
+          );
+
+          return {
+            name: category.charAt(0).toUpperCase() + category.slice(1),
+            value: totalAmount,
+            expenseItems,
+          };
+        } else {
+          console.warn(`No data found for category: ${category}`);
+          return {
+            name: category.charAt(0).toUpperCase() + category.slice(1),
+            value: 0,
+            expenseItems: [],
+          };
+        }
+      });
+
+      const fetchedData = await Promise.all(dataPromises);
+
+      setExpensesData(
+        fetchedData.map((item) => ({ name: item.name, value: item.value }))
+      );
+      setExpensesList(fetchedData.flatMap((item) => item.expenseItems));
+    } catch (error) {
+      console.error("Error fetching updated data:", error);
+    }
+  };
 
   const handleCategoryChange = (event) => {
     setSelectedCategory(event.target.value);
@@ -44,69 +188,113 @@ function Dashboard() {
     }
   };
 
-  const handleUpdateValue = () => {
-    const amount = parseFloat(inputValue);
-    if (selectedCategory && !isNaN(amount) && amount >= 0) {
-      const updatedData = expensesData.map((item) =>
-        item.name === selectedCategory
-          ? { ...item, value: item.value + amount }
-          : item
-      );
-      setExpensesData(updatedData);
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
+    handleAddAmount();
+  };
 
-      const categoryIndex = initialCategories.indexOf(selectedCategory);
-      const newExpense = {
-        category: selectedCategory,
-        amount: amount,
-        color: COLORS[categoryIndex % COLORS.length],
-        dateTime: selectedDateTime.toLocaleString(),
-      };
-      setExpensesList([...expensesList, newExpense]);
-
-      setInputValue("");
-    } else {
-      alert("Please enter a valid amount (must be 0 or greater).");
+  const handleEditExpense = (docid) => {
+    const expense = expensesList.find((expense) => expense.docid === docid);
+    if (expense) {
+      setEditingIndex(docid);
+      setEditValue(expense.amount);
     }
   };
 
-  const handleFormSubmit = (e) => {
-    e.preventDefault();
-    handleUpdateValue();
+  const handleSaveEdit = async (docid) => {
+    if (editValue === "") return;
+
+    const expense = expensesList.find((expense) => expense.docid === docid);
+    if (!expense) return;
+
+    try {
+      const category = expense.category;
+      const docId = expense.docid;
+
+      const updatedData = {
+        fields: {
+          amount: { integerValue: editValue },
+        },
+      };
+
+      // edit/patch
+      const response = await axios.patch(
+        `https://firestore.googleapis.com/v1/projects/budgetz-7b9d9/databases/(default)/documents/newusers/user1/${category}/${docId}`,
+        updatedData
+      );
+
+      if (response.status === 200) {
+        console.log("Expense successfully updated in Firestore");
+
+        const updatedExpensesList = expensesList.map((expense) =>
+          expense.docid === docid ? { ...expense, amount: editValue } : expense
+        );
+        setExpensesList(updatedExpensesList);
+
+        const updatedDataForCategory = expensesData.map((item) =>
+          item.name === expense.category
+            ? {
+                ...item,
+                value: item.value - expense.amount + editValue,
+              }
+            : item
+        );
+        setExpensesData(updatedDataForCategory);
+
+        setEditingIndex(null);
+        setEditValue("");
+      } else {
+        console.error("Failed to update expense in Firestore.");
+      }
+    } catch (error) {
+      console.error("Error updating expense:", error);
+    }
   };
 
-  const handleEditExpense = (index) => {
-    setEditingIndex(index);
-    setEditValue(expensesList[index].amount);
-  };
+  const handleDeleteExpense = async (docId) => {
+    console.log("Attempting to delete expense with docId:", docId);
+    try {
+      // Find the expense to delete by docId
+      const deletedExpense = expensesList.find(
+        (expense) => expense.docid === docId
+      );
 
-  const handleSaveEdit = (index) => {
-    const updatedExpensesList = [...expensesList];
-    const oldAmount = updatedExpensesList[index].amount;
-    updatedExpensesList[index].amount = parseFloat(editValue);
+      if (!deletedExpense) {
+        console.log("Expense not found in the list.");
+        return;
+      }
 
-    const updatedData = expensesData.map((item) =>
-      item.name === updatedExpensesList[index].category
-        ? { ...item, value: item.value - oldAmount + parseFloat(editValue) }
-        : item
-    );
-    setExpensesData(updatedData);
+      // Get the category (converted to lowercase) for the Firestore collection
+      const category = deletedExpense.category;
+      console.log(`Categories: ${category}`);
 
-    setExpensesList(updatedExpensesList);
-    setEditingIndex(null);
-  };
+      // Perform the delete operation using the document ID in Firestore
+      const response = await axios.delete(
+        `https://firestore.googleapis.com/v1/projects/budgetz-7b9d9/databases/(default)/documents/newusers/user1/${category}/${docId}`
+      );
 
-  const handleDeleteExpense = (index) => {
-    const deletedExpense = expensesList[index];
-    const updatedExpensesList = expensesList.filter((_, i) => i !== index);
+      if (response.status === 200) {
+        console.log(`Expense with docId: ${docId} deleted from Firestore.`);
 
-    const updatedData = expensesData.map((item) =>
-      item.name === deletedExpense.category
-        ? { ...item, value: item.value - deletedExpense.amount }
-        : item
-    );
-    setExpensesData(updatedData);
+        // Update local state only after successful deletion
+        const updatedExpensesList = expensesList.filter(
+          (expense) => expense.docid !== docId
+        );
+        setExpensesList(updatedExpensesList);
 
-    setExpensesList(updatedExpensesList);
+        // Update the total value for the category in expensesData
+        const updatedData = expensesData.map((item) =>
+          item.name === deletedExpense.category
+            ? { ...item, value: item.value - deletedExpense.amount } // Subtract the deleted amount from the category's total
+            : item
+        );
+        setExpensesData(updatedData);
+      } else {
+        console.error("Failed to delete expense from Firestore.");
+      }
+    } catch (error) {
+      console.error("Error deleting expense:", error);
+    }
   };
 
   const isAllZero = expensesData.every((item) => item.value === 0);
@@ -239,7 +427,7 @@ function Dashboard() {
                   className="w-4 h-4 rounded-full mr-2"
                   style={{ backgroundColor: expense.color }}
                 ></div>
-                {editingIndex === index ? (
+                {editingIndex === expense.docid ? (
                   <div className="flex items-center">
                     <input
                       type="number"
@@ -248,7 +436,7 @@ function Dashboard() {
                       className="mr-2 p-1 border border-gray-300 rounded"
                     />
                     <button
-                      onClick={() => handleSaveEdit(index)}
+                      onClick={() => handleSaveEdit(expense.docid)}
                       className="px-2 py-1 bg-green-500 text-white rounded"
                     >
                       Save
@@ -256,18 +444,19 @@ function Dashboard() {
                   </div>
                 ) : (
                   <span>
-                    {expense.category}: €{expense.amount.toFixed(2)} (Added on{" "}
+                    {expense.category}: €{expense.amount} (Added on{" "}
                     {expense.dateTime})
                   </span>
                 )}
+
                 <button
-                  onClick={() => handleEditExpense(index)}
+                  onClick={() => handleEditExpense(expense.docid)}
                   className="ml-2 px-2 py-1 bg-blue-500 text-white rounded"
                 >
                   Edit
                 </button>
                 <button
-                  onClick={() => handleDeleteExpense(index)}
+                  onClick={() => handleDeleteExpense(expense.docid)}
                   className="ml-2 px-2 py-1 bg-red-500 text-white rounded"
                 >
                   Delete

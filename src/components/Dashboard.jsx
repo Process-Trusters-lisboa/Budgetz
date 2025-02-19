@@ -7,7 +7,6 @@ function Dashboard() {
     'Food',
     'Rent',
     'Utility Bills',
-    'Remaining Balance',
     'Miscellaneous',
   ];
 
@@ -15,7 +14,7 @@ function Dashboard() {
     initialCategories.map((category) => ({ name: category, value: 0 }))
   );
 
-  const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884D8', '#A52A2A']; // Added a unique color for Miscellaneous
+  const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884D8', '#A52A2A'];
 
   const [selectedCategory, setSelectedCategory] = useState('');
   const [inputValue, setInputValue] = useState('');

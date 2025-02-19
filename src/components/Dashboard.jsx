@@ -3,12 +3,12 @@ import { PieChart, Pie, Cell, Legend, Tooltip, ResponsiveContainer } from 'recha
 
 function Dashboard() {
   const [expensesData, setExpensesData] = useState([
-    { name: 'Travel', value: 500 },
-    { name: 'Food', value: 300 },
-    { name: 'Rent', value: 1000 },
-    { name: 'Utility Bills', value: 200 },
-    { name: 'Remaining Balance', value: 1000 },
-    { name: 'Miscellaneous', value: 300 },
+    { name: 'Travel' },
+    { name: 'Food' },
+    { name: 'Rent' },
+    { name: 'Utility Bills' },
+    { name: 'Remaining Balance' },
+    { name: 'Miscellaneous'},
   ]);
 
   const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884D8'];
@@ -42,13 +42,18 @@ function Dashboard() {
     }
   };
 
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
+    handleUpdateValue();
+  };
+
   return (
     <div className="p-4 sm:p-6">
       <h1 className="text-xl sm:text-2xl font-bold mb-4">User Dashboard</h1>
       <div className="bg-white p-4 sm:p-6 rounded-lg shadow-md">
         <h2 className="text-lg sm:text-xl font-semibold mb-4">Expenses Breakdown</h2>
 
-        <div className="mb-4">
+        <form onSubmit={handleFormSubmit} className="mb-4">
           <label htmlFor="category-select" className="block text-sm font-medium text-gray-700">
             Select a Category
           </label>
@@ -65,30 +70,31 @@ function Dashboard() {
               </option>
             ))}
           </select>
-        </div>
 
-        {selectedCategory && (
-          <div className="mb-4">
-            <label htmlFor="amount-input" className="block text-sm font-medium text-gray-700">
-              Enter Amount (€) to Add to {selectedCategory}
-            </label>
-            <input
-              id="amount-input"
-              type="number"
-              min="0"
-              value={inputValue}
-              onChange={handleInputChange}
-              className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
-              placeholder="Enter amount in euros"
-            />
-            <button
-              onClick={handleUpdateValue}
-              className="mt-2 w-full sm:w-auto px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700"
-            >
-              Update Value
-            </button>
-          </div>
-        )}
+          {selectedCategory && (
+            <div className="mt-4">
+              <label htmlFor="amount-input" className="block text-sm font-medium text-gray-700">
+                Enter Amount (€) to Add to {selectedCategory}
+              </label>
+              <input
+                id="amount-input"
+                type="number"
+                min="0"
+                value={inputValue}
+                onChange={handleInputChange}
+                className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+                placeholder="Enter amount in euros"
+              />
+            </div>
+          )}
+
+          <button
+            type="submit"
+            className="mt-4 w-full sm:w-auto px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700"
+          >
+            Update Value
+          </button>
+        </form>
 
         <div className="w-full h-[350px] sm:h-[400px] md:h-[500px] lg:h-[600px]">
           <ResponsiveContainer width="100%" height="100%">

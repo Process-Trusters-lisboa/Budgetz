@@ -10,7 +10,7 @@ import Features from "./components/Features";
 function App() {
   return (
     <>
-      <div className="container relative mx-auto p-6">
+      <div className="container relative mx-auto p-6 ">
         <Navbar />
 
         <Routes>

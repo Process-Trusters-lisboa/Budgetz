@@ -3,9 +3,9 @@ import expensehero from '../assets/expensehero.jpg'
 
 function Hero() {
   return (
-    <div className="max-h-screen mx-auto">
+    <div className="h-full min-h-full mx-auto">
       <section>
-        <div className="flex flex-col-reverse mx-auto p-6 md:flex-row items-center">
+        <div className="flex flex-col-reverse mx-auto p-6 md:flex-row items-center ">
           <div className="flex flex-col space-y-10">
             <h1 className="mt-22 text-5xl text-center font-semibold text-gray-700">
               Your Smart Budget Manager

@@ -31,6 +31,7 @@ function Navbar() {
     const Logout = async () => {
       try {
         await signOut(auth); 
+        navigate('/');
       }
       catch (e) {
           console.log('Failed to sign in with Google', e);
@@ -74,6 +75,9 @@ function Navbar() {
           </Link>
           <div onClick={signInWithGoogle} className="text-blue-950">
             Google
+          </div>
+          <div onClick={Logout} className="text-blue-950">
+            SignOut
           </div>
         </div>
       </div>

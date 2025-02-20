@@ -15,7 +15,7 @@ function Features() {
     <>
       <section>
         <div className="mx-auto mt-16 px-6 min-h-full">
-          <h2 className="mb-6 text-4xl font-semibold text-center">Features</h2>
+          <h2 className="mb-6 text-4xl text-center text-gray-500 font-bold">Features</h2>
           <p className="max-w-md mx-auto text-center text-gray-500">
             Take control of your finances with our powerful and easy-to-use
             budget tracker. Designed to help you stay on top of your spending,

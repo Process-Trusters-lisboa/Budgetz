@@ -50,8 +50,8 @@ function Navbar() {
         {/* navbar logo */}
         <Link to="/">
           <div className="z-10 flex font-bold tracking-widest">
-            <h1 className="text-blue-600 text-6xl">B</h1>
-            <h1 className={`text-gray-600 mt-4 text-2xl`}>udgetz</h1>
+            <h1 className="text-blue-600 text-6xl md:pl-15">B</h1>
+            <h1 className={`text-gray-600 mt-4 text-2xl font-bold`}>udgetz</h1>
           </div>
         </Link>
 

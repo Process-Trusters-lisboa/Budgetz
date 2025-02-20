@@ -5,11 +5,11 @@ function Faq() {
   return (
     <div>
       <section>
-        <div className="container mx-auto mt-16">
-          <h2 className="mb-6 text-3xl font-semibold text-center md:text-4xl">
+        <div className="container mx-auto mt-16 min-h-full">
+          <h2 className="mb-6 text-3xl text-center md:text-4xl text-gray-500 font-bold">
             Frequently Asked Questions
           </h2>
-          <p className="max-w-lg px-6 mx-auto text-center text-graishBlue">
+          <p className="max-w-lg px-6 mx-auto text-center text-gray-500 font-bold">
             Here are some of our FAQs.
           </p>
         </div>

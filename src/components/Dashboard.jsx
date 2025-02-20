@@ -9,6 +9,7 @@ import {
 } from "recharts";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { auth } from "../config/firebase";
 import axios from "axios";
 
 function Dashboard() {
@@ -34,8 +35,11 @@ function Dashboard() {
   const [editingIndex, setEditingIndex] = useState(null);
   const [editValue, setEditValue] = useState("");
   const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState(null);
 
 
+  
+  
   //axios fetch data
   useEffect(() => {
     const fetchData = async () => {
@@ -55,9 +59,9 @@ function Dashboard() {
               return {
                 category: category.charAt(0).toUpperCase() + category.slice(1),
                 amount: amount,
-                color: COLORS[categories.indexOf(category) % COLORS.length], // Assign a color based on the category
+                color: COLORS[categories.indexOf(category) % COLORS.length], 
                 dateTime: new Date().toLocaleString(),
-                docid: document.name.split("/").pop(), // Extract docId from the document's name
+                docid: document.name.split("/").pop(), 
               };
             });
 
@@ -70,7 +74,7 @@ function Dashboard() {
             return {
               name: category.charAt(0).toUpperCase() + category.slice(1),
               value: totalAmount,
-              expenseItems, // Store individual expense items
+              expenseItems, 
             };
           } else {
             console.warn(`No data found for category: ${category}`);
@@ -143,7 +147,7 @@ function Dashboard() {
               amount: amount,
               color: COLORS[categories.indexOf(category) % COLORS.length],
               dateTime: new Date().toLocaleString(),
-              docId: document.name.split("/").pop(), // Extracting the document ID from Firestore path
+              docId: document.name.split("/").pop(), 
             };
           });
 
@@ -283,10 +287,9 @@ function Dashboard() {
         );
         setExpensesList(updatedExpensesList);
 
-        // Update the total value for the category in expensesData
         const updatedData = expensesData.map((item) =>
           item.name === deletedExpense.category
-            ? { ...item, value: item.value - deletedExpense.amount } // Subtract the deleted amount from the category's total
+            ? { ...item, value: item.value - deletedExpense.amount } 
             : item
         );
         setExpensesData(updatedData);

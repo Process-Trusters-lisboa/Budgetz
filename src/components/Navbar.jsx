@@ -31,6 +31,7 @@ function Navbar() {
     const Logout = async () => {
       try {
         await signOut(auth); 
+        setUser(null)
         navigate('/');
       }
       catch (e) {

@@ -6,7 +6,7 @@ function Faq() {
     <div>
       <section>
         <div className="container mx-auto mt-16 min-h-full">
-          <h2 className="mb-6 text-3xl text-center md:text-4xl text-gray-500 font-bold">
+          <h2 className="mb-6 text-3xl text-center md:text-4xl text-gray-600 font-bold">
             Frequently Asked Questions
           </h2>
           <p className="max-w-lg px-6 mx-auto text-center text-gray-500 font-bold">

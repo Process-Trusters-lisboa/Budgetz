@@ -17,12 +17,26 @@ function Dashboard() {
   const [editingIndex, setEditingIndex] = useState(null);
   const [editValue, setEditValue] = useState("");
   const [loading, setLoading] = useState(true);
-  const [initialBalance, setInitialBalance] = useState([]);
-  const [remainingBalance, setRemainingBalance] = useState(1000);
+  const [initialBalance, setInitialBalance] = useState(() => {
+    const savedInitialBalance = localStorage.getItem('initialBalance');
+    return savedInitialBalance ? parseFloat(savedInitialBalance) : "";
+  });
+  const [remainingBalance, setRemainingBalance] = useState(() => {
+    const savedRemainingBalance = localStorage.getItem('remainingBalance');
+    return savedRemainingBalance ? parseFloat(savedRemainingBalance) : 1000;
+  });
+
+  useEffect(() => {
+    localStorage.setItem('initialBalance', initialBalance);
+  }, [initialBalance]);
+
+  useEffect(() => {
+    localStorage.setItem('remainingBalance', remainingBalance);
+  }, [remainingBalance]);
 
   useEffect(() => {
     const totalExpenses = expensesData.reduce((total, item) => total + item.value, 0);
-    const newBalance = initialBalance - totalExpenses;
+    const newBalance = (initialBalance || 0) - totalExpenses;
     setRemainingBalance(newBalance);
   }, [expensesData, initialBalance]);
 
@@ -100,12 +114,14 @@ function Dashboard() {
     const expense = expensesList.find(expense => expense.docid === docid);
     if (expense) {
       setEditingIndex(docid);
-      setEditValue(expense.amount);
+      setEditValue(expense.amount.toString());
     }
   };
 
   const handleSaveEdit = async (docid) => {
-    if (editValue === "" || parseFloat(editValue) <= 0) {
+    const parsedValue = parseFloat(editValue.replace(/^0+/, ''));
+
+    if (isNaN(parsedValue) || parsedValue <= 0) {
       alert("Please enter a valid amount greater than 0.");
       return;
     }
@@ -115,11 +131,11 @@ function Dashboard() {
 
     try {
       await axios.patch(`https://firestore.googleapis.com/v1/projects/budgetz-7b9d9/databases/(default)/documents/newusers/user1/${expense.category}/${docid}`, {
-        fields: { amount: { integerValue: editValue } },
+        fields: { amount: { integerValue: parsedValue } },
       });
-      const updatedExpensesList = expensesList.map(expense => expense.docid === docid ? { ...expense, amount: editValue } : expense);
+      const updatedExpensesList = expensesList.map(expense => expense.docid === docid ? { ...expense, amount: parsedValue } : expense);
       setExpensesList(updatedExpensesList);
-      setExpensesData(expensesData.map(item => item.name === expense.category ? { ...item, value: item.value - expense.amount + editValue } : item));
+      setExpensesData(expensesData.map(item => item.name === expense.category ? { ...item, value: item.value - expense.amount + parsedValue } : item));
       setEditingIndex(null);
       setEditValue("");
     } catch (error) {
@@ -140,9 +156,9 @@ function Dashboard() {
   };
 
   const handleInitialBalanceChange = (e) => {
-    const newBalance = parseFloat(e.target.value);
-    if (!isNaN(newBalance) && newBalance >= 0) {
-      setInitialBalance(newBalance);
+    const value = e.target.value;
+    if (value === "" || (!isNaN(value) && parseFloat(value) >= 0)) {
+      setInitialBalance(value === "" ? "" : parseFloat(value));
     }
   };
 
@@ -167,6 +183,7 @@ function Dashboard() {
               value={initialBalance}
               onChange={handleInitialBalanceChange}
               className="block w-full p-3 border border-gray-300 rounded-md bg-gray-50 shadow focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+              placeholder="Enter initial balance"
             />
           </div>
         </div>
@@ -223,7 +240,14 @@ function Dashboard() {
                   <div className="w-4 h-4 rounded-full mr-2" style={{ backgroundColor: expense.color }}></div>
                   {editingIndex === expense.docid ? (
                     <div className="flex items-center">
-                      <input type="number" min="0.01" step="0.01" value={editValue} onChange={e => setEditValue(e.target.value)} className="mr-2 p-1 border border-gray-300 rounded" />
+                      <input
+                        type="number"
+                        min="0.01"
+                        step="0.01"
+                        value={editValue}
+                        onChange={e => setEditValue(e.target.value)}
+                        className="mr-2 p-1 border border-gray-300 rounded"
+                      />
                       <button onClick={() => handleSaveEdit(expense.docid)} className="px-2 py-1 bg-green-500 text-white rounded">Save</button>
                     </div>
                   ) : (

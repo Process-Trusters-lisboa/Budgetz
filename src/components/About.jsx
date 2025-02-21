@@ -68,11 +68,7 @@ function About() {
             <div className="flex justify-center rounded-2xl border-2 border-y-blue-300 border-x-gray-400 h-90 w-80 items-center justify-between md:p-20">
               <div>
                 <div className="flex items-center justify-center">
-                  <img
-                    src={profilepic}
-                    alt="profile-pic"
-                    className="h-35 w-35 items-center mb-10 rounded-full"
-                  />
+                  <img src="src/assets/Telmo1.jpg" alt="Profile Picture" className="h-35 w-35 items-center mb-10 rounded-full"/>                    
                 </div>
                 <div>
                   <h1 className="text-center text-xl text-gray-600 font-bold">

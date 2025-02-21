@@ -9,7 +9,7 @@ import javascrp from "../assets/javascript.png";
 import ract from "../assets/react.png";
 import fbase from "../assets/firebase.png";
 import linked from "../assets/linkIn.png";
-import { SocialIcon } from 'react-social-icons'
+import { SocialIcon } from "react-social-icons";
 
 function About() {
   //  const [isClicked, setisClicked] = useState(false);
@@ -21,22 +21,24 @@ function About() {
   return (
     <>
       <section className="border-none shadow-none outline-none overflow-hidden">
-        <h1 className="mt-16 text-center tracking-widest text-gray-600 font-bold text-4xl">About our Project</h1>
+        <h1 className="mt-16 text-center tracking-widest text-gray-600 font-bold text-4xl">
+          About our Project
+        </h1>
         <div>
           <p className="tracking-widest text-gray-500 font-medium text-center mt-5">
-            Welcome to Budgetz. We believe everyone
-            deserves control over their finances. That's why we've created an
-            intuitive budget tracker to help you manage your spending, save
-            more, and achieve your financial goals with ease. Whether you're
-            budgeting for the month, tracking daily expenses, or planning for
-            the future, our tool is designed with features to meet your unique
-            needs and make money management simple and effective.
+            Welcome to Budgetz. We believe everyone deserves control over their
+            finances. That's why we've created an intuitive budget tracker to
+            help you manage your spending, save more, and achieve your financial
+            goals with ease. Whether you're budgeting for the month, tracking
+            daily expenses, or planning for the future, our tool is designed
+            with features to meet your unique needs and make money management
+            simple and effective.
           </p>
         </div>
         <div className=" mt-20 flex items-center justify-center min-h-full border-none shadow-none outline-none overflow-hidden">
           <div className=" flex-col items-center m-6 space-y-10 shadow-2xl outline-none rounded md:flex flex-row md:space-y-0 md:m-0">
-                {/* first profile */}
-                <div className="flex justify-center rounded-2xl border-2 border-y-blue-600 border-x-gray-200 h-90 w-80 items-center justify-between md:p-20">
+            {/* first profile */}
+            <div className="flex justify-center rounded-2xl border-2 border-y-blue-600 border-x-gray-200 h-90 w-80 items-center justify-between md:p-20">
               <div>
                 <div className="flex items-center justify-center">
                   <img
@@ -46,15 +48,17 @@ function About() {
                   />
                 </div>
                 <div>
-                  <h1 className="text-center text-xl text-gray-600 font-bold">Samuel Onoja</h1>
+                  <h1 className="text-center text-xl text-gray-600 font-bold">
+                    Samuel Onoja
+                  </h1>
                 </div>
 
                 <div className="flex space-x-10 mt-5">
                   <div>
-                  <SocialIcon url="https://github.com/Samuelonoja" />
+                    <SocialIcon url="https://github.com/Samuelonoja" />
                   </div>
                   <div>
-                  <SocialIcon url="https://www.linkedin.com/in/samuelonoja" />
+                    <SocialIcon url="https://www.linkedin.com/in/samuelonoja" />
                   </div>
                 </div>
               </div>
@@ -71,15 +75,17 @@ function About() {
                   />
                 </div>
                 <div>
-                  <h1 className="text-center text-xl text-gray-600 font-bold">Telmo Lousada</h1>
+                  <h1 className="text-center text-xl text-gray-600 font-bold">
+                    Telmo Lousada
+                  </h1>
                 </div>
 
                 <div className="flex space-x-10 mt-5">
                   <div>
-                  <SocialIcon url="https://github.com/TelmoLousada" />
+                    <SocialIcon url="https://github.com/TelmoLousada" />
                   </div>
                   <div>
-                  <SocialIcon url="https://www.linkedin.com/in/telmo-lousada/" />
+                    <SocialIcon url="https://www.linkedin.com/in/telmo-lousada/" />
                   </div>
                 </div>
               </div>
@@ -106,7 +112,11 @@ function About() {
             <img src={fbase} alt="img" className="h-10 w-10 rounded-full" />
           </div>
           <div className="bg-black rounded-full">
-            <img src={githubb} alt="img" className="h-10 w-10 rounded-full cover" />
+            <img
+              src={githubb}
+              alt="img"
+              className="h-10 w-10 rounded-full cover"
+            />
           </div>
         </div>
       </section>

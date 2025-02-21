@@ -1,7 +1,6 @@
 import React from "react";
 
 function Faq() {
-
   return (
     <div>
       <section>
@@ -53,12 +52,11 @@ function Faq() {
               </div>
             </div>
 
-
-                 {/* Tab 2 */}
-                 <div className="py-1 border-b outline-none group" tabIndex="2">
+            {/* Tab 2 */}
+            <div className="py-1 border-b outline-none group" tabIndex="2">
               <div className="flex items-center justify-between py-3 text-gray-500 transition duration-500 cursor-pointer group ease">
                 <div className="transition duration-500 ease group-hover:text-blue-500">
-                Can I track my expenses on my phone?
+                  Can I track my expenses on my phone?
                 </div>
                 {/* Arrow */}
                 <div className="transition duration-500 ease group-focus:-rotate-180 group-focus:text-blue-500">
@@ -80,15 +78,15 @@ function Faq() {
               {/* Tab Inner Content */}
               <div className="overflow-hidden transition duration-500 group-focus:max-h-screen max-h-0 ease">
                 <p className="py-2 text-justify text-gray-500">
-                  Yes, you to track your expenses on the go. You can easily record purchases, check your budget, and review your progress from your phone.
-
+                  Yes, you to track your expenses on the go. You can easily
+                  record purchases, check your budget, and review your progress
+                  from your phone.
                 </p>
               </div>
             </div>
 
-
-                 {/* Tab 3 */}
-                 <div className="py-1 border-b outline-none group" tabIndex="3">
+            {/* Tab 3 */}
+            <div className="py-1 border-b outline-none group" tabIndex="3">
               <div className="flex items-center justify-between py-3 text-gray-500 transition duration-500 cursor-pointer group ease">
                 <div className="transition duration-500 ease group-hover:text-blue-500">
                   Why should I have a Budget?
@@ -113,16 +111,18 @@ function Faq() {
               {/* Tab Inner Content */}
               <div className="overflow-hidden transition duration-500 group-focus:max-h-screen max-h-0 ease">
                 <p className="py-2 text-justify text-gray-500">
-                Having a budget helps you keep track of your spending, save money, and avoid overspending. It gives you more control over your financial situation.
+                  Having a budget helps you keep track of your spending, save
+                  money, and avoid overspending. It gives you more control over
+                  your financial situation.
                 </p>
               </div>
             </div>
 
-                 {/* Tab 4 */}
-                 <div className="py-1 border-b outline-none group" tabIndex="4">
+            {/* Tab 4 */}
+            <div className="py-1 border-b outline-none group" tabIndex="4">
               <div className="flex items-center justify-between py-3 text-gray-500 transition duration-500 cursor-pointer group ease">
                 <div className="transition duration-500 ease group-hover:text-blue-500">
-                How often should I review my budget?
+                  How often should I review my budget?
                 </div>
                 {/* Arrow */}
                 <div className="transition duration-500 ease group-focus:-rotate-180 group-focus:text-blue-500">
@@ -144,12 +144,11 @@ function Faq() {
               {/* Tab Inner Content */}
               <div className="overflow-hidden transition duration-500 group-focus:max-h-screen max-h-0 ease">
                 <p className="py-2 text-justify text-gray-500">
-                It's a good idea to review your budget at least once a month to make sure you're staying on track and adjusting as needed.
+                  It's a good idea to review your budget at least once a month
+                  to make sure you're staying on track and adjusting as needed.
                 </p>
               </div>
             </div>
-
-
           </div>
         </div>
       </section>

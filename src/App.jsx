@@ -20,7 +20,6 @@ function App() {
           <Route path="/faq" element={<Faq />} />
           <Route path="/features" element={<Features />} />
         </Routes>
-
       </div>
     </>
   );

@@ -1,7 +1,7 @@
 import React from "react";
 import budget from "../assets/budget.jpg";
-import realtimetrack from '../assets/realtime_track.jpg'
-import insight from '../assets/insight.jpg'
+import realtimetrack from "../assets/realtime_track.jpg";
+import insight from "../assets/insight.jpg";
 import { useState } from "react";
 
 function Features() {
@@ -15,7 +15,9 @@ function Features() {
     <>
       <section>
         <div className="mx-auto mt-16 px-6 min-h-full">
-          <h2 className="mb-6 text-4xl text-center text-gray-600 font-bold">Features</h2>
+          <h2 className="mb-6 text-4xl text-center text-gray-600 font-bold">
+            Features
+          </h2>
           <p className="max-w-md mx-auto text-center text-gray-500">
             Take control of your finances with our powerful and easy-to-use
             budget tracker. Designed to help you stay on top of your spending,
@@ -77,7 +79,11 @@ function Features() {
                 } justify-center`}
               >
                 <div className="flex justify-center ">
-                  <img className="mt-2 h-70 w-70 rounded-l-4xl" src={realtimetrack} alt="" />
+                  <img
+                    className="mt-2 h-70 w-70 rounded-l-4xl"
+                    src={realtimetrack}
+                    alt=""
+                  />
                 </div>
                 <div>
                   <p className="mt-30 md:max-w-md text-center text-gray-500">
@@ -93,7 +99,11 @@ function Features() {
                 } justify-center`}
               >
                 <div className="flex justify-center ">
-                  <img className="mt-2 h-70 w-70 rounded-r-4xl" src={insight} alt="" />
+                  <img
+                    className="mt-2 h-70 w-70 rounded-r-4xl"
+                    src={insight}
+                    alt=""
+                  />
                 </div>
                 <div>
                   <p className="mt-20 md:max-w-md text-center text-gray-500">
@@ -111,7 +121,11 @@ function Features() {
                 } justify-center`}
               >
                 <div className="flex justify-center ">
-                  <img className="mt-2 h-70 w-70 rounded-l-4xl" src={budget} alt="" />
+                  <img
+                    className="mt-2 h-70 w-70 rounded-l-4xl"
+                    src={budget}
+                    alt=""
+                  />
                 </div>
                 <div>
                   <p className="mt-20 md:max-w-md text-center text-gray-500">

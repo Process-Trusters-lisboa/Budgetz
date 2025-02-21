@@ -17,7 +17,7 @@ function Dashboard() {
   const [editingIndex, setEditingIndex] = useState(null);
   const [editValue, setEditValue] = useState("");
   const [loading, setLoading] = useState(true);
-  const [initialBalance, setInitialBalance] = useState(1000);
+  const [initialBalance, setInitialBalance] = useState([]);
   const [remainingBalance, setRemainingBalance] = useState(1000);
 
   useEffect(() => {
@@ -57,7 +57,7 @@ function Dashboard() {
 
   const handleAddAmount = async () => {
     const amount = parseFloat(inputValue);
-    if (selectedCategory && !isNaN(amount) && amount >= 0) {
+    if (selectedCategory && !isNaN(amount) && amount > 0) {
       try {
         await axios.post(`https://firestore.googleapis.com/v1/projects/budgetz-7b9d9/databases/(default)/documents/newusers/user1/${selectedCategory}`, {
           fields: { amount: { integerValue: amount } },
@@ -68,7 +68,7 @@ function Dashboard() {
         console.error("Error adding amount:", error);
       }
     } else {
-      alert("Please enter a valid amount (must be 0 or greater).");
+      alert("Please enter a valid amount (must be greater than 0).");
     }
   };
 
@@ -105,9 +105,14 @@ function Dashboard() {
   };
 
   const handleSaveEdit = async (docid) => {
-    if (editValue === "") return;
+    if (editValue === "" || parseFloat(editValue) <= 0) {
+      alert("Please enter a valid amount greater than 0.");
+      return;
+    }
+
     const expense = expensesList.find(expense => expense.docid === docid);
     if (!expense) return;
+
     try {
       await axios.patch(`https://firestore.googleapis.com/v1/projects/budgetz-7b9d9/databases/(default)/documents/newusers/user1/${expense.category}/${docid}`, {
         fields: { amount: { integerValue: editValue } },
@@ -166,8 +171,8 @@ function Dashboard() {
           </div>
         </div>
         <div className="mb-6">
-          <h3 className="text-lg font-semibold mb-2">Remaining Balance Over Time</h3>
-          <div className="w-full h-[200px]">
+          <h3 className="text-lg font-semibold mb-2">Remaining Balance</h3>
+          <div className="w-full h-[300px] sm:h-[400px]">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={[{ name: "Remaining Balance", value: remainingBalance }]} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
                 <CartesianGrid strokeDasharray="3 3" />
@@ -188,20 +193,20 @@ function Dashboard() {
           {selectedCategory && (
             <div className="mt-4">
               <label htmlFor="amount-input" className="block text-sm font-medium text-gray-700 mb-2">Enter Amount (€) to Add to {selectedCategory}</label>
-              <input id="amount-input" type="number" min="0" value={inputValue} onChange={e => setInputValue(e.target.value)} className="block w-full p-3 border border-gray-300 rounded-md bg-gray-50 shadow focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" placeholder="Enter amount in euros" />
+              <input id="amount-input" type="number" min="0.01" step="0.01" value={inputValue} onChange={e => setInputValue(e.target.value)} className="block w-full p-3 border border-gray-300 rounded-md bg-gray-50 shadow focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" placeholder="Enter amount in euros" />
             </div>
           )}
           <div className="mt-4">
             <label htmlFor="date-time-picker" className="block text-sm font-medium text-gray-700 mb-2">Select Date and Time</label>
-            <DatePicker id="date-time-picker" selected={selectedDateTime} onChange={date => setSelectedDateTime(date)} showTimeSelect timeFormat="HH:mm" timeIntervals={15} timeCaption="Time" dateFormat="MMMM d, yyyy h:mm aa" className="block w-full p-3 border border-gray-300 rounded-md bg-gray-50 shadow focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" style={{ width: "100%", minWidth: "280px", padding: "10px" }} />
+            <DatePicker id="date-time-picker" selected={selectedDateTime} onChange={date => setSelectedDateTime(date)} showTimeSelect timeFormat="HH:mm" timeIntervals={15} timeCaption="Time" dateFormat="MMMM d, yyyy h:mm aa" className="block w-full p-3 border border-gray-300 rounded-md bg-gray-50 shadow focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" />
           </div>
           <button type="submit" className="mt-6 w-full sm:w-auto px-6 py-3 bg-indigo-600 text-white rounded-md shadow hover:bg-indigo-700 transition">Update Value</button>
         </form>
-        <div className="w-full h-[350px] sm:h-[400px] md:h-[500px] lg:h-[600px]">
+        <div className="w-full h-[300px] sm:h-[400px] md:h-[500px] lg:h-[600px]">
           <ResponsiveContainer width="100%" height="100%">
             {isAllZero ? <div className="flex items-center justify-center h-full text-gray-500">No data to display</div> : (
               <PieChart>
-                <Pie data={expensesData} cx="50%" cy="40%" outerRadius="70%" fill="#8884d8" dataKey="value" label={({ name, value, percent }) => value > 0 ? `${name}: €${value} (${(percent * 100).toFixed(2)}%)` : ""}>
+                <Pie data={expensesData} cx="50%" cy="50%" outerRadius="70%" fill="#8884d8" dataKey="value" label={({ name, value, percent }) => value > 0 ? `${name}: €${value} (${(percent * 100).toFixed(2)}%)` : ""}>
                   {expensesData.map((entry, index) => <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />)}
                 </Pie>
                 <Tooltip />
@@ -213,21 +218,21 @@ function Dashboard() {
           <h2 className="text-lg sm:text-xl font-semibold mb-4">Expenses List</h2>
           <ul>
             {expensesList.map((expense, index) => (
-              <li key={index} className="flex items-center justify-between mb-2">
-                <div className="flex items-center">
+              <li key={index} className="flex flex-col sm:flex-row items-center justify-between mb-2 p-2 border-b border-gray-200">
+                <div className="flex items-center mb-2 sm:mb-0">
                   <div className="w-4 h-4 rounded-full mr-2" style={{ backgroundColor: expense.color }}></div>
                   {editingIndex === expense.docid ? (
                     <div className="flex items-center">
-                      <input type="number" value={editValue} onChange={e => setEditValue(e.target.value)} className="mr-2 p-1 border border-gray-300 rounded" />
+                      <input type="number" min="0.01" step="0.01" value={editValue} onChange={e => setEditValue(e.target.value)} className="mr-2 p-1 border border-gray-300 rounded" />
                       <button onClick={() => handleSaveEdit(expense.docid)} className="px-2 py-1 bg-green-500 text-white rounded">Save</button>
                     </div>
                   ) : (
                     <span>{expense.category}: €{expense.amount} (Added on {expense.dateTime})</span>
                   )}
                 </div>
-                <div>
+                <div className="flex space-x-2">
                   <button onClick={() => handleEditExpense(expense.docid)} className="px-2 py-1 bg-blue-500 text-white rounded">Edit</button>
-                  <button onClick={() => handleDeleteExpense(expense.docid)} className="ml-2 px-2 py-1 bg-red-500 text-white rounded">Delete</button>
+                  <button onClick={() => handleDeleteExpense(expense.docid)} className="px-2 py-1 bg-red-500 text-white rounded">Delete</button>
                 </div>
               </li>
             ))}

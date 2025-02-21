@@ -24,7 +24,7 @@ function About() {
         <h1 className="mt-16 text-center tracking-widest text-gray-600 font-bold text-4xl">About our Project</h1>
         <div>
           <p className="tracking-widest text-gray-500 font-medium text-center mt-5">
-            Welcome to Budgetz, we believe everyone
+            Welcome to Budgetz. We believe everyone
             deserves control over their finances. That's why we've created an
             intuitive budget tracker to help you manage your spending, save
             more, and achieve your financial goals with ease. Whether you're
@@ -71,15 +71,15 @@ function About() {
                   />
                 </div>
                 <div>
-                  <h1 className="text-center text-xl text-gray-600 font-bold">Samuel Onoja</h1>
+                  <h1 className="text-center text-xl text-gray-600 font-bold">Telmo Lousada</h1>
                 </div>
 
                 <div className="flex space-x-10 mt-5">
                   <div>
-                  <SocialIcon url="https://github.com/Samuelonoja" />
+                  <SocialIcon url="https://github.com/TelmoLousada" />
                   </div>
                   <div>
-                  <SocialIcon url="https://www.linkedin.com/in/samuelonoja" />
+                  <SocialIcon url="https://www.linkedin.com/in/telmo-lousada/" />
                   </div>
                 </div>
               </div>
